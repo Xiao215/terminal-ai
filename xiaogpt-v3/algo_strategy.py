@@ -27,12 +27,12 @@ class AlgoStrategy(gamelib.AlgoCore):
         gamelib.debug_write('Random seed: {}'.format(seed))
         # defensive_stage is for when i should add more turrets
         self.defensive_stage = 0
-        self.first_support = [[2, 12], [1, 12]]
-        self.second_support = [[2, 11], [3, 11]]
+        self.first_support = [[3, 11], [3, 12]]
+        self.second_support = [[2, 11], [2, 12]]
         self.third_support = [[8,8],[9,8],[9,7],[10,7]]
         self.second_wall = [[6, 13], [22, 13], [23, 13], [24, 13], [25, 13], [26, 13]]
         
-        self.right_edge_wall = [[27, 13], [26, 12], [25, 11], [24, 10], [23, 9], [22, 8]]
+        self.right_edge_wall = [[27, 13], [26, 12], [25, 11], [24, 10], [23, 9]]
         # self.interceptor_destruct_strategy_wall = [[17, 9], [18, 9], [19, 9], [20, 9], [21, 9], [22, 9], [23, 9], [17, 8], [17, 7], [18, 7], [19, 7], [20, 7], [21, 7]]
         # self.interceptor_str_deploy = [[22, 8]]
         
@@ -127,6 +127,10 @@ class AlgoStrategy(gamelib.AlgoCore):
         self.trigger_attack(game_state)
         if(self.get_MP(game_state, 0) >= 18):
             self.launch_attack_full(game_state)
+        # if the other user can attack, then we need to defend
+        elif self.get_MP(game_state, 1) >= 15:
+            game_state.attempt_spawn(INTERCEPTOR, [7,6],1)
+            
         
 
 
@@ -224,10 +228,10 @@ class AlgoStrategy(gamelib.AlgoCore):
 
         # we check if we are / plan to use strategy of self-destruct interceptor
         
-        if self.if_indicator_destruct_str(game_state) or len(self.scored_on_locations) > 0:
+        if len(self.scored_on_locations) > 0:
             
         #     self.deploy_self_drstruct_strategy(game_state)
-                game_state.attempt_upgrade(self.right_edge_wall)
+            game_state.attempt_upgrade(self.right_edge_wall)
         
         
 
